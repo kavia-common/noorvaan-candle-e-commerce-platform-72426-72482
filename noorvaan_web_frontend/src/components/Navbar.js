@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
+import NoorvaanLogo from '../assets/noorvaan-logo.png';
 
 export default function Navbar() {
   const { items } = useCart();
@@ -15,7 +16,13 @@ export default function Navbar() {
   return (
     <nav className="nv-navbar">
       <div className="nv-container nv-nav-inner">
-        <Link to="/" className="nv-brand">NOORVAAN</Link>
+        <Link to="/" className="nv-brand" aria-label="Noorvaan Home">
+          <img
+            src={NoorvaanLogo}
+            alt="Noorvaan"
+            style={{ height: 28, width: 'auto', display: 'block' }}
+          />
+        </Link>
         <div className="nv-links">
           <NavLink to="/catalog" className="nv-link">Shop</NavLink>
           <NavLink to="/about" className="nv-link">About</NavLink>

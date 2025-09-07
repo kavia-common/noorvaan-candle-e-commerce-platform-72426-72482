@@ -22,8 +22,9 @@ describe('Collections and content pages', () => {
     const { container } = renderWithProviders(<App />, { initialEntries: ['/contact'] });
     const main = within(container.querySelector('main') || container);
     expect(main.getByRole('heading', { name: /Care & FAQ/i })).toBeInTheDocument();
-    // FAQs render as details elements. Use text match on summary content inside the main scope.
+    // FAQs render as details elements. Select summary content via text to avoid role ambiguity.
     expect(main.getByText(/How do I avoid tunneling\?/i)).toBeInTheDocument();
+    expect(main.getByText(/Can I reuse the vessel\?/i)).toBeInTheDocument();
     // Contact form button
     expect(main.getByRole('button', { name: /^Send$/i })).toBeInTheDocument();
   });

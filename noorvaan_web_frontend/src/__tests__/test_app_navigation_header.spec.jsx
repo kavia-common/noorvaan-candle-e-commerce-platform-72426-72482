@@ -24,10 +24,12 @@ describe('App navigation, header, and promo bar', () => {
     expect(header.getByRole('button', { name: /Open cart/i })).toBeInTheDocument();
 
     // Desktop nav might be hidden; still assert link presence using scoped queries
-    // Limit to single query to avoid ambiguity on hidden/visible
-    expect(header.getByRole('link', { name: /Candles Shop/i })).toBeInTheDocument();
-    expect(header.getByRole('link', { name: /About/i })).toBeInTheDocument();
-    expect(header.getByRole('link', { name: /FAQ & Care/i })).toBeInTheDocument();
+    // Scope queries within desktop nav container to avoid matching hidden/mobile duplicates
+    const desktopNavEl = container.querySelector('header .desktop-nav') || headers[0];
+    const desktopNav = within(desktopNavEl);
+    expect(desktopNav.getByRole('link', { name: /Candles Shop/i })).toBeInTheDocument();
+    expect(desktopNav.getByRole('link', { name: /About/i })).toBeInTheDocument();
+    expect(desktopNav.getByRole('link', { name: /FAQ & Care/i })).toBeInTheDocument();
   });
 
   test('mobile drawer toggles via menu button', () => {
@@ -36,9 +38,11 @@ describe('App navigation, header, and promo bar', () => {
     const menuBtn = header.getByRole('button', { name: /Open menu/i });
     fireEvent.click(menuBtn);
 
-    // Now mobile links appear in drawer; scope to the exact mobile card container
-    const drawerCard = container.querySelector('header .container + .container .card') || container.querySelector('header .card');
+    // Now mobile links appear in drawer; scope to the open mobile drawer card within header container
+    const drawerCard = container.querySelector('header .container + .container .card');
     const drawer = within(drawerCard || container);
+
+    // Scope ensures we only match visible links in opened drawer (avoid hidden/desktop duplicates)
     expect(drawer.getByRole('link', { name: /^Home$/i })).toBeInTheDocument();
     expect(drawer.getByRole('link', { name: /^Candles Shop$/i })).toBeInTheDocument();
     expect(drawer.getByRole('link', { name: /^FAQ & Care$/i })).toBeInTheDocument();

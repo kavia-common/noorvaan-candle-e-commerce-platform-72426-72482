@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor, within } from '@testing-library/react';
 import App from '../App';
 import { renderWithProviders } from './test_utils';
 
@@ -7,30 +7,31 @@ import { renderWithProviders } from './test_utils';
 
 describe('Checkout flow (mocked Stripe)', () => {
   test('shows disabled pay button when cart empty and enables with items', async () => {
-    renderWithProviders(<App />, { initialEntries: ['/checkout'] });
-    const btn = screen.getByRole('button', { name: /Pay/i });
+    const { container } = renderWithProviders(<App />, { initialEntries: ['/checkout'] });
+    const main = within(container.querySelector('main') || container);
+    const btn = main.getByRole('button', { name: /^Pay/i });
     expect(btn).toBeDisabled();
-
-    // Navigate to PDP to add item
-    // Using router: go to PDP then back to checkout
-    // Easiest: push product route
   });
 
   test('successful mock payment clears cart and navigates home', async () => {
-    const utils = renderWithProviders(<App />, { initialEntries: ['/product/indian-daisy-evening-charm'] });
+    const { container } = renderWithProviders(<App />, { initialEntries: ['/product/indian-daisy-evening-charm'] });
+    const main = within(container.querySelector('main') || container);
     // Add to cart
-    fireEvent.click(screen.getByRole('button', { name: /Add to cart/i }));
-    // Proceed to checkout
-    fireEvent.click(screen.getByRole('link', { name: /Checkout/i }));
+    fireEvent.click(main.getByRole('button', { name: /Add to cart/i }));
+    // Proceed to checkout via drawer CTA
+    const drawer = within(container.getElementsByTagName('aside')[0]);
+    fireEvent.click(drawer.getByRole('link', { name: /^Checkout$/i }));
+
     // Email input
-    const email = screen.getByLabelText(/Email/i);
+    const checkoutMain = within(container.querySelector('main') || container);
+    const email = checkoutMain.getByLabelText(/^Email$/i);
     fireEvent.change(email, { target: { value: 'test@example.com' } });
 
     // Card element is mocked input
-    const card = screen.getByTestId('mock-card-element');
+    const card = checkoutMain.getByTestId('mock-card-element');
     fireEvent.change(card, { target: { value: '4242 4242 4242 4242' } });
 
-    const payBtn = screen.getByRole('button', { name: /Pay \$\d+\.\d{2}/i });
+    const payBtn = checkoutMain.getByRole('button', { name: /Pay \$\d+\.\d{2}/i });
     expect(payBtn).not.toBeDisabled();
 
     fireEvent.click(payBtn);
@@ -38,7 +39,8 @@ describe('Checkout flow (mocked Stripe)', () => {
     // Wait for navigation back to home and alert called
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalled();
-      expect(screen.getByRole('heading', { name: /Noorvaan — Carrier of Light/i })).toBeInTheDocument();
+      const home = within(container.querySelector('main') || container);
+      expect(home.getByRole('heading', { name: /Noorvaan — Carrier of Light/i })).toBeInTheDocument();
     });
   });
 });

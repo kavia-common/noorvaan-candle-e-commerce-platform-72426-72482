@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
+import { render, within } from '@testing-library/react';
 import { CartProvider } from '../providers/CartContext';
 import { ContentProvider } from '../providers/ContentContext';
 import { Elements } from '@stripe/react-stripe-js';
@@ -16,8 +16,11 @@ jest.mock('@stripe/react-stripe-js', () => {
   };
 });
 
+// PUBLIC_INTERFACE
 export function renderWithProviders(ui, { route = '/', initialEntries = [route] } = {}) {
-  // Wrap with Content and Cart and MemoryRouter and mocked Elements to ensure Stripe hooks have context.
+  /** Render a UI wrapped with ContentProvider, CartProvider, MemoryRouter, and mocked Stripe Elements.
+   * Returns RTL render result. Prefer using within(result.container) in tests to scope queries.
+   */
   const Wrapper = ({ children }) => (
     <Elements>
       <ContentProvider>
@@ -29,5 +32,12 @@ export function renderWithProviders(ui, { route = '/', initialEntries = [route] 
       </ContentProvider>
     </Elements>
   );
-  return render(ui, { wrapper: Wrapper });
+  const result = render(ui, { wrapper: Wrapper });
+  return result;
+}
+
+// PUBLIC_INTERFACE
+export function withinContainer(container) {
+  /** Convenience helper to get a scoped query API for a specific container element. */
+  return within(container);
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 
@@ -17,14 +17,16 @@ const product = {
 
 describe('ProductCard', () => {
   test('renders essential product info', () => {
-    render(
+    const { container } = render(
       <MemoryRouter>
         <ProductCard product={product} />
       </MemoryRouter>
     );
-    expect(screen.getByText(/Test Candle/i)).toBeInTheDocument();
-    expect(screen.getByText(/Signature/i)).toBeInTheDocument();
-    expect(screen.getByText(/\$50\.00/)).toBeInTheDocument();
-    expect(screen.getByText(/New/i)).toBeInTheDocument();
+    const cardEl = container.querySelector('a.card') || container.firstChild;
+    const card = within(cardEl);
+    expect(card.getByText(/Test Candle/i)).toBeInTheDocument();
+    expect(card.getByText(/Signature/i)).toBeInTheDocument();
+    expect(card.getByText(/\$50\.00/)).toBeInTheDocument();
+    expect(card.getByText(/New/i)).toBeInTheDocument();
   });
 });

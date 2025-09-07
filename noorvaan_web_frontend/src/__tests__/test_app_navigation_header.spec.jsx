@@ -5,35 +5,49 @@ import { renderWithProviders } from './test_utils';
 
 describe('App navigation, header, and promo bar', () => {
   test('renders promo bar when enabled and header links', async () => {
-    renderWithProviders(<App />, { route: '/' });
+    const { container } = renderWithProviders(<App />, { route: '/' });
 
-    // Promo bar text comes from site.json
-    expect(screen.getByText(/Free shipping over \$85/i)).toBeInTheDocument();
+    // Scope promo bar within announcement container
+    const announcementBars = container.getElementsByClassName('announcement');
+    expect(announcementBars.length).toBeGreaterThan(0);
+    const promo = within(announcementBars[0]);
+    expect(promo.getByText(/Free shipping over \$85/i)).toBeInTheDocument();
 
-    // Header has key links
-    expect(screen.getByRole('link', { name: /NOORVAAN/i })).toHaveAttribute('href', '/');
-    expect(screen.getByRole('link', { name: /Checkout/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Open cart/i })).toBeInTheDocument();
+    // Scope header area
+    const headers = container.getElementsByTagName('header');
+    const header = within(headers[0]);
 
-    // Nav may render desktop nav hidden by CSS; verify presence of critical link by text
-    expect(screen.getAllByRole('link', { name: /Candles Shop/i })[0]).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /About/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /FAQ & Care/i })).toBeInTheDocument();
+    // Header has key links and buttons
+    expect(header.getByRole('link', { name: /^NOORVAAN$/i })).toHaveAttribute('href', '/');
+    // Checkout link inside header action group
+    expect(header.getAllByRole('link', { name: /Checkout/i })[0]).toBeInTheDocument();
+    expect(header.getByRole('button', { name: /Open cart/i })).toBeInTheDocument();
+
+    // Desktop nav might be hidden; still assert link presence using scoped queries
+    const shopLinks = header.getAllByRole('link', { name: /Candles Shop/i });
+    expect(shopLinks[0]).toBeInTheDocument();
+    expect(header.getByRole('link', { name: /About/i })).toBeInTheDocument();
+    expect(header.getByRole('link', { name: /FAQ & Care/i })).toBeInTheDocument();
   });
 
   test('mobile drawer toggles via menu button', () => {
-    renderWithProviders(<App />, { route: '/' });
-    const menuBtn = screen.getByRole('button', { name: /Open menu/i });
+    const { container } = renderWithProviders(<App />, { route: '/' });
+    const header = within(container.getElementsByTagName('header')[0]);
+    const menuBtn = header.getByRole('button', { name: /Open menu/i });
     fireEvent.click(menuBtn);
-    // Now mobile links appear in drawer
-    expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Candles Shop/i })).toBeInTheDocument();
+
+    // Now mobile links appear in drawer (scoped to the first .card under header)
+    const cards = container.querySelectorAll('header .card');
+    const drawer = cards.length ? within(cards[0]) : header;
+    expect(drawer.getByRole('link', { name: /^Home$/i })).toBeInTheDocument();
+    expect(drawer.getByRole('link', { name: /^Candles Shop$/i })).toBeInTheDocument();
   });
 
   test('navigates to PLP and displays sort control and results count', () => {
-    renderWithProviders(<App />, { route: '/shop' });
-    expect(screen.getByRole('heading', { name: /Scented Candles/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/Sort/i)).toBeInTheDocument();
-    expect(screen.getByText(/results/i)).toBeInTheDocument();
+    const { container } = renderWithProviders(<App />, { route: '/shop' });
+    const main = within(container.querySelector('main') || container);
+    expect(main.getByRole('heading', { name: /Scented Candles/i })).toBeInTheDocument();
+    expect(main.getByLabelText(/^Sort$/i)).toBeInTheDocument();
+    expect(main.getByText(/\b\d+\s+results\b/i)).toBeInTheDocument();
   });
 });

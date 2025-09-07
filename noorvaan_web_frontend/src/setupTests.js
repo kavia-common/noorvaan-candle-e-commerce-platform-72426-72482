@@ -13,3 +13,13 @@ beforeAll(() => {
 jest.mock('@stripe/stripe-js', () => ({
   loadStripe: jest.fn().mockResolvedValue({}),
 }));
+
+// Globally mock @stripe/react-stripe-js so all tests get a consistent mock Elements/provider and hooks
+jest.mock('@stripe/react-stripe-js', () => {
+  return {
+    Elements: ({ children }) => <>{children}</>,
+    CardElement: (props) => <input data-testid="mock-card-element" {...props} />,
+    useStripe: () => ({ confirmCardPayment: jest.fn() }),
+    useElements: () => ({ getElement: jest.fn() }),
+  };
+});

@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, within, fireEvent } from '@testing-library/react';
+import { within, fireEvent } from '@testing-library/react';
 import App from '../App';
 import { renderWithProviders } from './test_utils';
 
@@ -20,12 +20,12 @@ describe('App navigation, header, and promo bar', () => {
     // Header has key links and buttons
     expect(header.getByRole('link', { name: /^NOORVAAN$/i })).toHaveAttribute('href', '/');
     // Checkout link inside header action group
-    expect(header.getAllByRole('link', { name: /Checkout/i })[0]).toBeInTheDocument();
+    expect(header.getByRole('link', { name: /^Checkout$/i })).toBeInTheDocument();
     expect(header.getByRole('button', { name: /Open cart/i })).toBeInTheDocument();
 
     // Desktop nav might be hidden; still assert link presence using scoped queries
-    const shopLinks = header.getAllByRole('link', { name: /Candles Shop/i });
-    expect(shopLinks[0]).toBeInTheDocument();
+    // Limit to single query to avoid ambiguity on hidden/visible
+    expect(header.getByRole('link', { name: /Candles Shop/i })).toBeInTheDocument();
     expect(header.getByRole('link', { name: /About/i })).toBeInTheDocument();
     expect(header.getByRole('link', { name: /FAQ & Care/i })).toBeInTheDocument();
   });
@@ -36,11 +36,12 @@ describe('App navigation, header, and promo bar', () => {
     const menuBtn = header.getByRole('button', { name: /Open menu/i });
     fireEvent.click(menuBtn);
 
-    // Now mobile links appear in drawer (scoped to the first .card under header)
-    const cards = container.querySelectorAll('header .card');
-    const drawer = cards.length ? within(cards[0]) : header;
+    // Now mobile links appear in drawer; scope to the exact mobile card container
+    const drawerCard = container.querySelector('header .container + .container .card') || container.querySelector('header .card');
+    const drawer = within(drawerCard || container);
     expect(drawer.getByRole('link', { name: /^Home$/i })).toBeInTheDocument();
     expect(drawer.getByRole('link', { name: /^Candles Shop$/i })).toBeInTheDocument();
+    expect(drawer.getByRole('link', { name: /^FAQ & Care$/i })).toBeInTheDocument();
   });
 
   test('navigates to PLP and displays sort control and results count', () => {

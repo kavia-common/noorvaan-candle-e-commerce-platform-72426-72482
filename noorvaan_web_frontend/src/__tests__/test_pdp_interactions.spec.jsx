@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent, within } from '@testing-library/react';
+import { fireEvent, within } from '@testing-library/react';
 import App from '../App';
 import { renderWithProviders } from './test_utils';
 
@@ -29,11 +29,10 @@ describe('PDP interactions and details', () => {
     const addBtn = main.getByRole('button', { name: /Add to cart/i });
     fireEvent.click(addBtn);
 
-    // Cart drawer should show "Your Cart" and subtotal > 0
+    // Cart drawer should show "Your Cart" and subtotal aria-label value
     const drawer = within(container.getElementsByTagName('aside')[0]);
     expect(drawer.getByText(/Your Cart/i)).toBeInTheDocument();
-    expect(drawer.getByText(/Subtotal/i)).toBeInTheDocument();
-    // subtotal shows a dollar amount
-    expect(drawer.getByText(/\$\d+\.\d{2}/)).toBeInTheDocument();
+    const subtotal = drawer.getByLabelText(/^subtotal \$\d+\.\d{2}$/i);
+    expect(subtotal).toBeInTheDocument();
   });
 });

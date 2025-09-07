@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent, within } from '@testing-library/react';
+import { fireEvent, within } from '@testing-library/react';
 import App from '../App';
 import { renderWithProviders } from './test_utils';
 
@@ -10,20 +10,22 @@ describe('PLP filtering and sorting', () => {
     const main = within(container.querySelector('main') || container);
 
     // Pre-condition: there are multiple product cards
-    expect(container.querySelectorAll('a.card').length).toBeGreaterThan(2);
+    const grid = container.querySelector('.grid.grid-4') || container;
+    expect(grid.querySelectorAll('a.card').length).toBeGreaterThan(2);
 
     // Access sidebar and toggle checkboxes via labels within the sidebar container
-    const sidebar = within(container.querySelector('aside') || container);
+    const sidebarEl = container.querySelector('aside');
+    const sidebar = within(sidebarEl || container);
 
-    const floralLabel = sidebar.getByText(/^Floral$/);
+    const floralLabel = sidebar.getByText(/^Floral$/i);
     const floralCheckbox = floralLabel.closest('label').querySelector('input[type="checkbox"]');
     fireEvent.click(floralCheckbox);
 
-    const woodyLabel = sidebar.getByText(/^Woody$/);
+    const woodyLabel = sidebar.getByText(/^Woody$/i);
     const woodyCheckbox = woodyLabel.closest('label').querySelector('input[type="checkbox"]');
     fireEvent.click(woodyCheckbox);
 
-    const sigLabel = sidebar.getByText(/^Signature$/);
+    const sigLabel = sidebar.getByText(/^Signature$/i);
     const sigCheckbox = sigLabel.closest('label').querySelector('input[type="checkbox"]');
     fireEvent.click(sigCheckbox);
 
@@ -32,11 +34,11 @@ describe('PLP filtering and sorting', () => {
     expect(results).toBeInTheDocument();
 
     // URL should include query params (family and size)
-    expect(window.location.search).toMatch(/family=/);
-    expect(window.location.search).toMatch(/size=/);
+    expect(window.location.search).toMatch(/family=/i);
+    expect(window.location.search).toMatch(/size=/i);
 
-    // Active chip appears, Clear all clears filters (use aria-label "Clear filters")
-    const clearBtn = sidebar.getByRole('button', { name: /Clear filters|Clear all/i });
+    // Active chip appears, Clear all clears filters via aria-label "Clear filters"
+    const clearBtn = sidebar.getByRole('button', { name: /^Clear filters$/i });
     fireEvent.click(clearBtn);
     expect(window.location.search).toBe('');
   });
@@ -50,8 +52,11 @@ describe('PLP filtering and sorting', () => {
     // Validate that selection changed and still on PLP
     expect(select).toHaveValue('price-desc');
     expect(main.getByRole('heading', { name: /Scented Candles/i })).toBeInTheDocument();
+    // Check router location reflects sort
+    expect(window.location.search).toMatch(/sort=price-desc/i);
 
     // There are still product cards
-    expect(container.querySelectorAll('a.card').length).toBeGreaterThan(0);
+    const grid = container.querySelector('.grid.grid-4') || container;
+    expect(grid.querySelectorAll('a.card').length).toBeGreaterThan(0);
   });
 });

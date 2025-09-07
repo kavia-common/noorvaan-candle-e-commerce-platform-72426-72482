@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, within } from '@testing-library/react';
+import { within } from '@testing-library/react';
 import App from '../App';
 import { renderWithProviders } from './test_utils';
 
@@ -22,9 +22,8 @@ describe('Collections and content pages', () => {
     const { container } = renderWithProviders(<App />, { initialEntries: ['/contact'] });
     const main = within(container.querySelector('main') || container);
     expect(main.getByRole('heading', { name: /Care & FAQ/i })).toBeInTheDocument();
-    // FAQs render as details elements; summary is exposed as a button by role in some UAs, scope within main
-    const faqButtons = main.getAllByRole('button', { name: /How do I avoid tunneling\?/i });
-    expect(faqButtons.length).toBeGreaterThan(0);
+    // FAQs render as details elements. Use text match on summary content inside the main scope.
+    expect(main.getByText(/How do I avoid tunneling\?/i)).toBeInTheDocument();
     // Contact form button
     expect(main.getByRole('button', { name: /^Send$/i })).toBeInTheDocument();
   });

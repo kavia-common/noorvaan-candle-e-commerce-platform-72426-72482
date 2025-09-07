@@ -17,41 +17,41 @@ describe('Cart drawer operations', () => {
     const drawerAside = asides[asides.length - 1];
     const drawer = within(drawerAside);
 
-    // Increase qty in the drawer
-    const qtyInput = drawer.getByRole('spinbutton', { name: /Qty/i });
+    // Increase qty in the drawer using unique label association
+    const qtyInput = drawer.getByRole('spinbutton', { name: /^Qty$/i });
     fireEvent.change(qtyInput, { target: { value: '2' } });
 
-    // Subtotal updated to reflect quantity 2
-    expect(drawer.getByText(/Subtotal/i)).toBeInTheDocument();
-    expect(drawer.getByText(/\$\d+\.\d{2}/)).toBeInTheDocument();
+    // Subtotal updated to reflect quantity 2; use aria-label for uniqueness
+    const subtotalEl = drawer.getByLabelText(/^subtotal \$\d+\.\d{2}$/i);
+    expect(subtotalEl).toBeInTheDocument();
 
     // Free shipping message: remaining or unlocked text shows
+    // Use case-insensitive text that includes "shipping" scoped to drawer body
     expect(drawer.getByText(/shipping/i)).toBeInTheDocument();
 
     // Remove item
-    const removeBtns = drawer.getAllByRole('button', { name: /Remove/i });
-    fireEvent.click(removeBtns[0]);
+    const removeBtn = drawer.getByRole('button', { name: /^Remove$/i });
+    fireEvent.click(removeBtn);
     expect(drawer.getByText(/Your cart is empty/i)).toBeInTheDocument();
 
     // Close, add again, then clear
     fireEvent.click(drawer.getByRole('button', { name: /Close/i }));
 
-    // Navigate home via header brand and go to PLP
+    // Navigate via header brand and hero shop CTA
     const header = within(container.getElementsByTagName('header')[0]);
     fireEvent.click(header.getByRole('link', { name: /^NOORVAAN$/i }));
-    fireEvent.click(header.getByRole('link', { name: /Checkout/i })); // ensures header links reachable
-    // go back to home and shop explicitly
-    fireEvent.click(header.getByRole('link', { name: /^NOORVAAN$/i }));
+
     const hero = within(container.querySelector('.hero') || container);
     fireEvent.click(hero.getByRole('link', { name: /Shop Scented Candles/i }));
 
-    // Click first product card to go to PDP
+    // Click first product card to go to PDP (scoped within grid)
     const grid = container.querySelector('.grid.grid-4') || container;
     const firstCard = grid.querySelectorAll('a.card')[0];
     fireEvent.click(firstCard);
 
     // Add to cart again
-    fireEvent.click(main.getByRole('button', { name: /Add to cart/i }));
+    const pdp = within(container.querySelector('main') || container);
+    fireEvent.click(pdp.getByRole('button', { name: /Add to cart/i }));
 
     // Drawer is open, clear
     const drawer2 = within(container.getElementsByTagName('aside')[0]);

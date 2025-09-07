@@ -10,7 +10,7 @@ export default function Navbar() {
   const cartCount = items.reduce((n, it) => n + it.qty, 0);
 
   const cycleTheme = () => {
-    setTheme(prev => prev === 'auto' ? 'light' : prev === 'light' ? 'dark' : 'auto');
+    setTheme(prev => (prev === 'auto' ? 'light' : prev === 'light' ? 'dark' : 'auto'));
   };
 
   return (
@@ -20,7 +20,7 @@ export default function Navbar() {
           <img
             src={NoorvaanLogo}
             alt="Noorvaan"
-            style={{ height: 28, width: 'auto', display: 'block' }}
+            className="nv-logo"
           />
         </Link>
         <div className="nv-links">

@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react';
 import App from './App';
+import { renderWithProviders } from './__tests__/test_utils';
 
 test('renders without crashing', () => {
-  render(<App />);
+  renderWithProviders(<App />);
 });

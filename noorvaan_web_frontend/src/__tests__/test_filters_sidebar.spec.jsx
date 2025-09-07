@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import FiltersSidebar from '../components/FiltersSidebar';
 
 const facets = {

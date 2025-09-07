@@ -1,9 +1,38 @@
+/**
+ * PUBLIC_INTERFACE
+ * parseMulti
+ * Reads multi-select query params supporting both repeated keys (?k=a&k=b)
+ * and comma-separated single values (?k=a,b). Returns an array of strings.
+ */
 export function parseMulti(qs, key) {
-  const val = qs.getAll(key);
-  if (val && val.length) return val;
+  // Collect all values for this key (handles repeated params)
+  const repeated = qs.getAll(key) || [];
+  // Also handle single comma-separated form
   const single = qs.get(key);
-  if (!single) return [];
-  return single.split(',').map(s => decodeURIComponent(s)).filter(Boolean);
+
+  const parts = [];
+  if (repeated.length > 0) {
+    for (const v of repeated) {
+      if (typeof v === 'string' && v.length) {
+        // If a repeated entry itself has commas, split it too
+        parts.push(...v.split(',').map(s => s.trim()).filter(Boolean));
+      }
+    }
+  } else if (single) {
+    parts.push(...single.split(',').map(s => s.trim()).filter(Boolean));
+  }
+
+  // Deduplicate while preserving order
+  const seen = new Set();
+  const out = [];
+  for (const p of parts) {
+    const dec = decodeURIComponent(p);
+    if (!seen.has(dec)) {
+      seen.add(dec);
+      out.push(dec);
+    }
+  }
+  return out;
 }
 
 export function applyFilters(products, selected) {
@@ -36,12 +65,35 @@ export function applyFilters(products, selected) {
 
 export function sortProducts(list, sortKey) {
   const arr = [...list];
+  // Use stable secondary sort by slug to make deterministic
+  const bySlug = (a, b) => (a.slug || '').localeCompare(b.slug || '');
   switch (sortKey) {
-    case 'price-asc': return arr.sort((a,b)=>(a.price||0)-(b.price||0));
-    case 'price-desc': return arr.sort((a,b)=>(b.price||0)-(a.price||0));
-    case 'new': return arr.sort((a,b)=> (b.is_new?-1:1));
-    case 'best': return arr.sort((a,b)=> (b.is_best_seller?-1:1));
-    default: return arr; // featured default ordering
+    case 'price-asc':
+      return arr.sort((a,b)=> {
+        const diff = (a.price||0) - (b.price||0);
+        return diff !== 0 ? diff : bySlug(a,b);
+      });
+    case 'price-desc':
+      return arr.sort((a,b)=> {
+        const diff = (b.price||0) - (a.price||0);
+        return diff !== 0 ? diff : bySlug(a,b);
+      });
+    case 'new':
+      // New items first; tie-break deterministically by slug
+      return arr.sort((a,b)=> {
+        const aNew = !!a.is_new, bNew = !!b.is_new;
+        if (aNew === bNew) return bySlug(a,b);
+        return bNew - aNew; // true > false
+      });
+    case 'best':
+      // Best sellers first; tie-break by slug
+      return arr.sort((a,b)=> {
+        const aBest = !!a.is_best_seller, bBest = !!b.is_best_seller;
+        if (aBest === bBest) return bySlug(a,b);
+        return bBest - aBest; // true > false
+      });
+    default:
+      return arr; // featured default ordering
   }
 }
 

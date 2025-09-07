@@ -1,0 +1,8 @@
+{
+  "announcement": {
+    "enabled": true,
+    "threshold": 85,
+    "code": "",
+    "message": "Free shipping over $85"
+  }
+}

@@ -1,49 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import PLPPage from './pages/PLPPage';
+import PDPPage from './pages/PDPPage';
+import CollectionsPage from './pages/CollectionsPage';
+import AboutPage from './pages/AboutPage';
+import ContactFaqPage from './pages/ContactFaqPage';
+import CartDrawer from './components/CartDrawer';
+import CheckoutPage from './pages/CheckoutPage';
+import { useCart } from './providers/CartContext';
+import PromoBar from './components/PromoBar';
 
 // PUBLIC_INTERFACE
-function App() {
-  const [theme, setTheme] = useState('light');
-
-  // Effect to apply theme to document element
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
+export default function App() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { items } = useCart();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <PromoBar />
+      <Header onOpenCart={() => setDrawerOpen(true)} cartCount={items.reduce((s,i)=>s+i.qty,0)} />
+      <main className="container" style={{paddingTop: 24}}>
+        <Routes>
+          <Route path="/" element={<HomePage onOpenCart={() => setDrawerOpen(true)} />} />
+          <Route path="/shop" element={<PLPPage />} />
+          <Route path="/product/:slug" element={<PDPPage onOpenCart={() => setDrawerOpen(true)} />} />
+          <Route path="/collections/:slug" element={<CollectionsPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactFaqPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+        </Routes>
+      </main>
+      <Footer />
+      <CartDrawer open={drawerOpen} onClose={()=>setDrawerOpen(false)} />
+    </>
   );
 }
-
-export default App;

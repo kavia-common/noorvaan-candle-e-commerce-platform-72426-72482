@@ -23,13 +23,20 @@ describe('App navigation, header, and promo bar', () => {
     expect(header.getByRole('link', { name: /^Checkout$/i })).toBeInTheDocument();
     expect(header.getByRole('button', { name: /Open cart/i })).toBeInTheDocument();
 
-    // Desktop nav might be hidden; still assert link presence using scoped queries
-    // Scope queries within desktop nav container to avoid matching hidden/mobile duplicates
-    const desktopNavEl = container.querySelector('header .desktop-nav') || headers[0];
-    const desktopNav = within(desktopNavEl);
-    expect(desktopNav.getByRole('link', { name: /Candles Shop/i })).toBeInTheDocument();
-    expect(desktopNav.getByRole('link', { name: /About/i })).toBeInTheDocument();
-    expect(desktopNav.getByRole('link', { name: /FAQ & Care/i })).toBeInTheDocument();
+    // Desktop nav may be hidden in tests; instead, assert mobile drawer links when opened
+    const menuBtn = header.getByRole('button', { name: /Open menu/i });
+    fireEvent.click(menuBtn);
+
+    // Scope to the visible mobile drawer card within header container
+    const drawerCard = container.querySelector('header .container + .container .card');
+    const drawer = within(drawerCard || container);
+
+    // Ensure we only match visible links in opened drawer (avoid hidden/desktop duplicates)
+    expect(drawer.getByRole('link', { name: /^Home$/i })).toBeInTheDocument();
+    expect(drawer.getByRole('link', { name: /^Candles Shop$/i })).toBeInTheDocument();
+    expect(drawer.getByRole('link', { name: /^About$/i })).toBeInTheDocument();
+    expect(drawer.getByRole('link', { name: /^Collections$/i })).toBeInTheDocument();
+    expect(drawer.getByRole('link', { name: /^FAQ & Care$/i })).toBeInTheDocument();
   });
 
   test('mobile drawer toggles via menu button', () => {

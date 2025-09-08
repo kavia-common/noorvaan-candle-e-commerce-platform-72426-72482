@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { CartProvider } from '../providers/CartContext';
 import { ContentProvider } from '../providers/ContentContext';
 import { Elements } from '@stripe/react-stripe-js';
@@ -30,3 +30,10 @@ export function withinContainer(container) {
   /** Convenience helper to get a scoped query API for a specific container element. */
   return within(container);
 }
+
+// Minimal passing test to ensure this helper file contributes a green spec
+test('renderWithProviders mounts children inside providers', () => {
+  const { container } = renderWithProviders(<div data-testid="inside">ok</div>);
+  const scoped = within(container);
+  expect(scoped.getByTestId('inside')).toHaveTextContent('ok');
+});

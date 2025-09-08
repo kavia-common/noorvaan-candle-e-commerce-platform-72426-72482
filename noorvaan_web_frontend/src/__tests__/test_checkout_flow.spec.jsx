@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { fireEvent, waitFor, within } from '@testing-library/react';
 import App from '../App';
 import { renderWithProviders } from './test_utils';
 
@@ -36,11 +36,14 @@ describe('Checkout flow (mocked Stripe)', () => {
 
     fireEvent.click(payBtn);
 
-    // Wait for navigation back to home and alert called
+    // Wait for alert to be called first (simulate payment success), then verify home heading after navigation.
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalled();
+    }, { timeout: 3000 });
+
+    await waitFor(() => {
       const home = within(container.querySelector('main') || container);
       expect(home.getByRole('heading', { name: /Noorvaan — Carrier of Light/i })).toBeInTheDocument();
-    });
+    }, { timeout: 3000 });
   });
 });

@@ -1,0 +1,222 @@
+[
+  {
+    "slug": "indian-daisy-evening-charm",
+    "name": "Indian Daisy — Evening Charm",
+    "family": "Floral",
+    "collection": "House & Home",
+    "vessel_color": "#F6E7B5",
+    "vessel_color_name": "Amber",
+    "notes": {
+      "top": ["Cardamom", "Clove", "Citrus Zest"],
+      "heart": ["Chrysanthemum", "Jasmine Petals"],
+      "base": ["Soft Musk", "Warm Woods"]
+    },
+    "room_story": "Golden hour veranda — spiced air and fading light.",
+    "at_a_glance": ["Long-lasting", "Reusable glass", "Clean wax", "Cotton wick"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1505575972945-270f40c7d532?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "New",
+    "size_display": "Signature",
+    "is_new": true,
+    "is_best_seller": false,
+    "price": 68
+  },
+  {
+    "slug": "agarwood-mogra-queen-of-nights",
+    "name": "Agarwood + Mogra — Queen of Nights",
+    "family": "Floral",
+    "collection": "Absolute",
+    "vessel_color": "#F2E8F3",
+    "vessel_color_name": "Clear",
+    "notes": {
+      "top": ["Jasmine Bud", "Green Notes"],
+      "heart": ["Mogra", "Night Blooming Jasmine"],
+      "base": ["Agarwood", "Smoky Amber"]
+    },
+    "room_story": "Midnight jasmine bloom in warm summer air.",
+    "at_a_glance": ["Long-lasting", "Clean wax", "Low-soot"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1493666438817-866a91353ca9?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "Best Seller",
+    "size_display": "Signature",
+    "is_new": false,
+    "is_best_seller": true,
+    "price": 82
+  },
+  {
+    "slug": "agarwood-magnolia-nilgiri-velvet",
+    "name": "Agarwood + Magnolia — Nilgiri Velvet",
+    "family": "Woody",
+    "collection": "House & Home",
+    "vessel_color": "#E9F1EF",
+    "vessel_color_name": "Green",
+    "notes": {
+      "top": ["Bergamot", "Leafy Greens"],
+      "heart": ["Himalayan Magnolia", "Jasmine"],
+      "base": ["Agarwood", "Sandal"]
+    },
+    "room_story": "Monsoon gardens and forest temples.",
+    "at_a_glance": ["Reusable glass", "Clean wax"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1542317853-2f84c0bda81f?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "Limited",
+    "size_display": "Classic",
+    "is_new": false,
+    "is_best_seller": false,
+    "price": 48
+  },
+  {
+    "slug": "divine-oud-noor-of-oud",
+    "name": "Divine Oud — Noor of Oud",
+    "family": "Amber",
+    "collection": "Absolute",
+    "vessel_color": "#222222",
+    "vessel_color_name": "Black",
+    "notes": {
+      "top": ["Saffron", "Incense"],
+      "heart": ["Smoked Woods", "Resin"],
+      "base": ["Agarwood", "Labdanum"]
+    },
+    "room_story": "A resinous trail through royal courts and rituals.",
+    "at_a_glance": ["Long-lasting", "Cotton wick"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "Best Seller",
+    "size_display": "3-wick",
+    "is_new": false,
+    "is_best_seller": true,
+    "price": 140
+  },
+  {
+    "slug": "juhiphool-jasmine-kiss",
+    "name": "Juhiphool — Jasmine Kiss",
+    "family": "Floral",
+    "collection": "Source & Story",
+    "vessel_color": "#FFDDE6",
+    "vessel_color_name": "Pink",
+    "notes": {
+      "top": ["Gardenia", "Pear"],
+      "heart": ["Jasmine Sambac", "Mogra"],
+      "base": ["Vanilla", "Soft Musk"]
+    },
+    "room_story": "Courtyard swings and temple garlands at dawn.",
+    "at_a_glance": ["Clean wax", "Reusable glass"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "New",
+    "size_display": "Signature",
+    "is_new": true,
+    "is_best_seller": false,
+    "price": 68
+  },
+  {
+    "slug": "pink-velvet-rose-cashmere",
+    "name": "Pink Velvet — Rosé Cashmere",
+    "family": "Fruity",
+    "collection": "House & Home",
+    "vessel_color": "#FFC0CB",
+    "vessel_color_name": "Pink",
+    "notes": {
+      "top": ["Raspberry", "Pink Jasmine"],
+      "heart": ["Peony", "Rose"],
+      "base": ["Vanilla", "Cedarwood", "Sugared Musk"]
+    },
+    "room_story": "Velvet sweetness for soirées and slow mornings.",
+    "at_a_glance": ["Long-lasting"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1542317853-2f84c0bda81f?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "Limited",
+    "size_display": "Signature",
+    "is_new": false,
+    "is_best_seller": false,
+    "price": 72
+  },
+  {
+    "slug": "temple-wish-mannat-mysore-sandal",
+    "name": "Temple Wish — Mannat + Mysore Sandal",
+    "family": "Woody",
+    "collection": "Absolute",
+    "vessel_color": "#E5D6B8",
+    "vessel_color_name": "Amber",
+    "notes": {
+      "top": ["Creamy Sandalwood"],
+      "heart": ["Mannat Attar", "Bridal Musk"],
+      "base": ["Sandal", "Amber"]
+    },
+    "room_story": "Blessings whispered beneath jasmine‑wrapped hands.",
+    "at_a_glance": ["Reusable glass", "Clean wax"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1505575972945-270f40c7d532?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "",
+    "size_display": "Signature",
+    "is_new": false,
+    "is_best_seller": false,
+    "price": 96
+  },
+  {
+    "slug": "teak-gardens-kutcha-bela-teakwood",
+    "name": "Teak Gardens — Kutcha Bela + Teakwood",
+    "family": "Woody",
+    "collection": "House & Home",
+    "vessel_color": "#C3B091",
+    "vessel_color_name": "Brown",
+    "notes": {
+      "top": ["Fresh Jasmine"],
+      "heart": ["Kutcha Bela"],
+      "base": ["Teakwood", "Sandal"]
+    },
+    "room_story": "Sandal halls, summer rains, sacred spaces.",
+    "at_a_glance": ["Low‑soot", "Clean wax"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1493666438817-866a91353ca9?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "",
+    "size_display": "Classic",
+    "is_new": false,
+    "is_best_seller": false,
+    "price": 52
+  },
+  {
+    "slug": "midnight-rose-kaala-gulaab",
+    "name": "Midnight Rose — Kaala Gulaab",
+    "family": "Floral",
+    "collection": "Source & Story",
+    "vessel_color": "#4B2C35",
+    "vessel_color_name": "Black",
+    "notes": {
+      "top": ["Damask Rose"],
+      "heart": ["Dark Rose Petals", "Saffron"],
+      "base": ["Oud", "Amber"]
+    },
+    "room_story": "Mughal gardens at dusk; silk saris and rosewater rituals.",
+    "at_a_glance": ["Long-lasting", "Clean wax"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "",
+    "size_display": "Signature",
+    "is_new": false,
+    "is_best_seller": false,
+    "price": 84
+  },
+  {
+    "slug": "gulposh-mannat-allure",
+    "name": "Gulposh Mannat — Allure",
+    "family": "Spicy",
+    "collection": "Absolute",
+    "vessel_color": "#E6D9D1",
+    "vessel_color_name": "Clear",
+    "notes": {
+      "top": ["Spiced Saffron"],
+      "heart": ["Gulposh Bouquet"],
+      "base": ["Crisp Woods", "Mountain Air"]
+    },
+    "room_story": "Temple smoke and embroidered saris in motion.",
+    "at_a_glance": ["Reusable glass"],
+    "burn_time_by_size": { "4oz": 40, "8oz": 60, "14oz": 80, "30oz": 120, "86oz": 200 },
+    "images": ["https://images.unsplash.com/photo-1542317853-2f84c0bda81f?q=80&w=1200&auto=format&fit=crop"],
+    "badge": "New",
+    "size_display": "4-wick",
+    "is_new": true,
+    "is_best_seller": false,
+    "price": 165
+  }
+]

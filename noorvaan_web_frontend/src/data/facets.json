@@ -1,0 +1,8 @@
+{
+  "families": ["Fresh","Floral","Woody","Fruity","Gourmand","Citrus","Herbal","Spicy","Amber"],
+  "sizes": ["Classic","Signature","3-wick","4-wick"],
+  "collections": ["House & Home","Absolute","Source & Story"],
+  "colors": ["Blue","Green","Amber","Clear","Black","Pink","Brown"],
+  "price_ranges": ["<$40","$40–$80","$80–$150","$150+"],
+  "badges": ["Best Seller","Limited","New"]
+}

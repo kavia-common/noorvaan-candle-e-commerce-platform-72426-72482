@@ -76,7 +76,7 @@ export default function Header({ onOpenCart, cartCount }) {
           <button className="btn btn-ghost" aria-label="Open menu" onClick={(e) => { mobileOpenerRef.current = e.currentTarget; setMobileOpen(v=>!v); }} style={{display:'inline-flex'}}>
             ☰
           </button>
-          <Link to="/" style={{fontWeight: 800, letterSpacing: 1, fontSize: 18}} aria-label="Noorvaan home">
+          <Link to="/" style={{fontWeight: 800, letterSpacing: 1, fontSize: 18}}>
             NOORVAAN
           </Link>
         </div>

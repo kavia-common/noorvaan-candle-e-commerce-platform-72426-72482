@@ -13,7 +13,7 @@ export default function ProductCard({ product }) {
         <div style={{position:'absolute', inset:0, background: vessel_color || '#ddd', opacity:.2}} />
         <img
           src={images?.[0] || `https://placehold.co/600x600/png?text=${encodeURIComponent(name)}`}
-          alt={name}
+          alt={name || 'Candle product image'}
           style={{width:'100%', height:'100%', objectFit:'cover', mixBlendMode:'multiply'}}
           loading="lazy"
         />

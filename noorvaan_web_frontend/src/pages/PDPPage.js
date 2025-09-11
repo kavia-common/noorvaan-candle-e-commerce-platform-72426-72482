@@ -67,8 +67,9 @@ export default function PDPPage({ onOpenCart }) {
         <section>
           <h3>Burn time by size</h3>
           <table className="table" aria-label="Burn time by size">
+            <caption className="sr-only" style={{position:'absolute',left:'-10000px',top:'auto',width:'1px',height:'1px',overflow:'hidden'}}>Estimated burn hours per candle size</caption>
             <thead>
-              <tr><th>Size</th><th>Burn Time</th></tr>
+              <tr><th scope="col">Size</th><th scope="col">Burn Time</th></tr>
             </thead>
             <tbody>
               {Object.entries(burnMap).slice(0,5).map(([size, hours]) => (

@@ -8,9 +8,14 @@ export default function HomePage({ onOpenCart }) {
   const { fragrances } = useContent();
   const featured = fragrances.slice(0, 6);
 
+  // Light SEO hints
+  document.title = 'Noorvaan — Carrier of Light | Luxury Scented Candles';
+  const metaDesc = 'Luxury soy candles inspired by Mughal gardens at twilight. Clean, vegan, low‑soot. Hand‑poured in NYC.';
+  updateMeta('description', metaDesc);
+
   return (
     <div style={{display:'grid', gap:30}}>
-      <section className="hero">
+      <section className="hero" aria-label="Hero introduction">
         <div className="surface">
           <div style={{display:'grid', gridTemplateColumns:'1.4fr 1fr', gap:20}}>
             <div>
@@ -22,26 +27,31 @@ export default function HomePage({ onOpenCart }) {
                 <Link className="btn btn-primary" to="/shop">Shop Scented Candles</Link>
                 <Link className="btn" to="/collections/house-and-home">Explore Collections</Link>
               </div>
-              <div style={{marginTop:12, color:'var(--muted)'}}><span className="badge">Clean • Vegan • Low‑Soot</span></div>
+              <div style={{marginTop:12, color:'var(--muted)'}}><span className="badge" aria-label="Trust statements">Clean • Vegan • Low‑Soot</span></div>
             </div>
             <div className="card" style={{padding:0, overflow:'hidden'}}>
-              <img alt="Hero candle" src="https://images.unsplash.com/photo-1505575972945-270f40c7d532?q=80&w=1200&auto=format&fit=crop" style={{width:'100%', height:'100%', objectFit:'cover'}} />
+              <img
+                alt="Hero candle against soft twilight hues"
+                src="https://images.unsplash.com/photo-1505575972945-270f40c7d532?q=80&w=1200&auto=format&fit=crop"
+                style={{width:'100%', height:'100%', objectFit:'cover'}}
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      <section>
+      <section aria-labelledby="featured-heading">
         <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between'}}>
-          <h2 style={{margin:'6px 0'}}>Featured</h2>
-          <Link to="/shop">View all →</Link>
+          <h2 id="featured-heading" style={{margin:'6px 0'}}>Featured</h2>
+          <Link to="/shop" aria-label="View all scented candles">View all →</Link>
         </div>
         <div className="grid grid-4">
           {featured.map(p => <ProductCard key={p.slug} product={p} />)}
         </div>
       </section>
 
-      <section>
+      <section aria-label="Brand values" >
         <div className="card" style={{padding:24}}>
           <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:20}}>
             <div>
@@ -60,12 +70,17 @@ export default function HomePage({ onOpenCart }) {
         </div>
       </section>
 
-      <section>
-        <h3 style={{margin:'6px 0'}}>From the Journal</h3>
+      <section aria-labelledby="journal-heading">
+        <h3 id="journal-heading" style={{margin:'6px 0'}}>From the Journal</h3>
         <div className="grid grid-3">
           {[1,2,3].map(i => (
             <article key={i} className="card" style={{overflow:'hidden'}}>
-              <img alt="Journal" src={`https://images.unsplash.com/photo-15${i}575972945-270f40c7d532?q=80&w=1200&auto=format&fit=crop`} style={{width:'100%', height:200, objectFit:'cover'}} />
+              <img
+                alt="Journal article visual"
+                src={`https://images.unsplash.com/photo-15${i}575972945-270f40c7d532?q=80&w=1200&auto=format&fit=crop`}
+                style={{width:'100%', height:200, objectFit:'cover'}}
+                loading="lazy"
+              />
               <div style={{padding:12}}>
                 <div className="badge">Education</div>
                 <h4>Care & Safety • Wick Trim</h4>
@@ -78,4 +93,16 @@ export default function HomePage({ onOpenCart }) {
       </section>
     </div>
   );
+}
+
+/** Utility to upsert simple meta tags (no external deps) */
+function updateMeta(name, content) {
+  const sel = `meta[name="${name}"]`;
+  let el = document.head.querySelector(sel);
+  if (!el) {
+    el = document.createElement('meta');
+    el.setAttribute('name', name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', content);
 }

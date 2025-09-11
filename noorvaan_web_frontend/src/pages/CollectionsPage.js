@@ -11,6 +11,10 @@ export default function CollectionsPage() {
   const col = collections.find(c => c.slug === slug) || collections[0];
   const prods = fragrances.filter(f => col.products?.includes(f.slug));
 
+  // Minimal SEO updates (non-blocking)
+  if (col?.title) document.title = `${col.title} • Noorvaan Collections`;
+  if (col?.intro) upsertMeta('description', col.intro);
+
   return (
     <div style={{display:'grid', gap:20}}>
       <section className="hero">
@@ -23,7 +27,14 @@ export default function CollectionsPage() {
       <section className="grid grid-3">
         {(col.blocks || []).map((b, idx) => (
           <div key={idx} className="card" style={{overflow:'hidden'}}>
-            {b.image && <img alt={b.title} src={b.image} style={{width:'100%', height:200, objectFit:'cover'}} />}
+            {b.image && (
+              <img
+                alt={b.title}
+                src={b.image}
+                style={{width:'100%', height:200, objectFit:'cover'}}
+                loading="lazy"
+              />
+            )}
             <div style={{padding:12}}>
               <h3 style={{margin:'4px 0'}}>{b.title}</h3>
               <p style={{color:'var(--muted)'}}>{b.text}</p>
@@ -54,4 +65,23 @@ export default function CollectionsPage() {
       </section>
     </div>
   );
+}
+
+/**
+ * Upserts a meta tag (e.g., description) into the document head.
+ * Kept local to avoid adding dependencies.
+ */
+function upsertMeta(name, content) {
+  try {
+    const sel = `meta[name="${name}"]`;
+    let el = document.head.querySelector(sel);
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute('name', name);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+  } catch {
+    // no-op in non-browser environments (tests)
+  }
 }

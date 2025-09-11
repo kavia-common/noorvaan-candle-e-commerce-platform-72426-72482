@@ -1,7 +1,8 @@
 import React from 'react';
 
-// PUBLIC_INTERFACE
+/* PUBLIC_INTERFACE */
 export default function AboutPage() {
+  document.title = 'About Noorvaan • Brand, Craft, Origin';
   return (
     <div className="hero">
       <div className="surface">

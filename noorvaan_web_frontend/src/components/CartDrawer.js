@@ -59,7 +59,7 @@ export default function CartDrawer({ open, onClose }) {
                   </div>
                 </div>
                 <div style={{marginTop:8}}>
-                  <button className="btn" onClick={()=>remove(item.sku)}>Remove</button>
+                  <button className="btn" onClick={()=>remove(item.sku)} aria-label="Remove">Remove</button>
                 </div>
               </div>
             );

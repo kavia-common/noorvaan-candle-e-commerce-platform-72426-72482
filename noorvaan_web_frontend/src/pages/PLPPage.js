@@ -55,11 +55,11 @@ export default function PLPPage() {
         <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:10}}>
           <div>
             <h1 style={{margin:'0 0 6px'}}>Scented Candles</h1>
-            <div style={{color:'var(--muted)'}}>{sorted.length} results</div>
+            <div id="results-count" style={{color:'var(--muted)'}}>{sorted.length} results</div>
           </div>
           <div style={{display:'flex', alignItems:'center', gap:8}}>
             <label htmlFor="sort">Sort</label>
-            <select id="sort" value={sortKey} onChange={onSort}>
+            <select id="sort" aria-describedby="results-count" value={sortKey} onChange={onSort}>
               <option value="featured">Featured</option>
               <option value="best">Best Sellers</option>
               <option value="price-asc">Price: Low to High</option>

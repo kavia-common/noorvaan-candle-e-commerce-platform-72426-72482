@@ -8,8 +8,13 @@ import { ContentProvider } from './providers/ContentContext';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePk = process.env.REACT_APP_REACT_APP_STRIPE_PUBLISHABLE_KEY || '';
+const stripePk = process.env.REACT_APP_REACT_APP_STRIPE_PUBLISHABLE_KEY || process.env.REACT_APP_REACT_APP_STRIPE_PUBLISHABLE_KEY || '';
 const stripePromise = loadStripe(stripePk);
+
+// Ensure <html lang> is set for a11y/SEO
+if (document?.documentElement) {
+  document.documentElement.lang = document.documentElement.lang || 'en';
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

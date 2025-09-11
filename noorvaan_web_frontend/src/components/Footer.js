@@ -21,10 +21,10 @@ export default function Footer() {
         </div>
         <div>
           <h4>Newsletter</h4>
-          <form onSubmit={(e)=>{e.preventDefault(); alert('Thank you for subscribing!')}}>
+          <form onSubmit={(e)=>{e.preventDefault(); alert('Thank you for subscribing!')}} aria-label="Newsletter signup">
             <input className="input" type="email" placeholder="you@example.com" required aria-label="Email" />
             <div style={{height:8}} />
-            <button className="btn btn-primary" type="submit">Subscribe</button>
+            <button className="btn btn-primary" type="submit" aria-label="Subscribe to newsletter">Subscribe</button>
           </form>
         </div>
       </div>

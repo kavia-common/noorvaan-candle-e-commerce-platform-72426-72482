@@ -44,12 +44,12 @@ export default function ContactFaqPage() {
       <section className="card" style={{padding:16}}>
         <h3>Contact</h3>
         <p style={{color:'var(--muted)'}}>Questions? Email us at support@noorvaan.example</p>
-        <form onSubmit={(e)=>{e.preventDefault(); alert('Thanks, we will be in touch.')}}>
+        <form onSubmit={(e)=>{e.preventDefault(); alert('Thanks, we will be in touch.')}} aria-label="Contact form">
           <div style={{display:'grid', gap:10}}>
-            <input className="input" placeholder="Your name" required />
-            <input className="input" type="email" placeholder="you@example.com" required />
-            <textarea className="input" placeholder="How can we help?" rows={4} required />
-            <button className="btn btn-primary" type="submit">Send</button>
+            <input className="input" placeholder="Your name" required aria-label="Your name" />
+            <input className="input" type="email" placeholder="you@example.com" required aria-label="Email" />
+            <textarea className="input" placeholder="How can we help?" rows={4} required aria-label="Message" />
+            <button className="btn btn-primary" type="submit" aria-label="Send">Send</button>
           </div>
         </form>
       </section>

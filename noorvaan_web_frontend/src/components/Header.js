@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 function NavItem({ to, children }) {
@@ -14,11 +14,66 @@ export default function Header({ onOpenCart, cartCount }) {
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // a11y: focus trapping for mobile nav drawer
+  const mobileDrawerRef = useRef(null);
+  const mobileHeadingRef = useRef(null);
+  const mobileOpenerRef = useRef(null);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      // remember opener, move focus inside drawer
+      mobileOpenerRef.current = document.activeElement;
+      setTimeout(() => mobileHeadingRef.current?.focus(), 0);
+    } else if (mobileOpenerRef.current && typeof mobileOpenerRef.current.focus === 'function') {
+      // restore focus when closing
+      mobileOpenerRef.current.focus();
+    }
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const drawer = mobileDrawerRef.current;
+    if (!drawer) return;
+
+    const getFocusable = () => drawer.querySelectorAll(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+
+    function onKeyDown(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setMobileOpen(false);
+        return;
+      }
+      if (e.key === 'Tab') {
+        const nodes = getFocusable();
+        if (!nodes.length) return;
+        const first = nodes[0];
+        const last = nodes[nodes.length - 1];
+        const current = document.activeElement;
+        if (e.shiftKey) {
+          if (current === first || !drawer.contains(current)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (current === last || !drawer.contains(current)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown, true);
+    return () => document.removeEventListener('keydown', onKeyDown, true);
+  }, [mobileOpen]);
+
   return (
     <header className="navbar">
       <div className="container" style={{display:'flex', alignItems:'center', justifyContent:'space-between', padding: '14px 0', gap: 12}}>
         <div style={{display:'flex', alignItems:'center', gap: 10}}>
-          <button className="btn btn-ghost" aria-label="Open menu" onClick={() => setMobileOpen(v=>!v)} style={{display:'inline-flex'}}>
+          <button className="btn btn-ghost" aria-label="Open menu" onClick={(e) => { mobileOpenerRef.current = e.currentTarget; setMobileOpen(v=>!v); }} style={{display:'inline-flex'}}>
             ☰
           </button>
           <Link to="/" style={{fontWeight: 800, letterSpacing: 1, fontSize: 18}} aria-label="Noorvaan home">
@@ -72,7 +127,16 @@ export default function Header({ onOpenCart, cartCount }) {
 
       {mobileOpen && (
         <div className="container" style={{paddingBottom: 12}}>
-          <div className="card" style={{padding: 12}}>
+          <div
+            className="card"
+            style={{padding: 12, position: 'relative'}}
+            ref={mobileDrawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-nav-heading"
+          >
+            {/* a11y: initial focus target for drawer */}
+            <div id="mobile-nav-heading" tabIndex={-1} ref={mobileHeadingRef} style={{position:'absolute', width:1, height:1, overflow:'hidden', clip:'rect(0 0 0 0)'}}>Navigation</div>
             <div style={{display:'grid', gap:6}}>
               <Link to="/" onClick={()=>setMobileOpen(false)}>Home</Link>
               <Link to="/shop" onClick={()=>setMobileOpen(false)}>Candles Shop</Link>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../providers/CartContext';
 import { useContent } from '../providers/ContentContext';
@@ -10,19 +10,89 @@ export default function CartDrawer({ open, onClose }) {
   const threshold = site?.announcement?.threshold || 0;
   const remaining = Math.max(0, threshold - subtotal);
 
+  // a11y: track and restore the element that opened the drawer
+  const openerRef = useRef(null);
+  // a11y: focus management inside drawer
+  const drawerRef = useRef(null);
+  const headingRef = useRef(null);
+
+  // a11y: capture the active element when transitioning from closed->open and send focus to heading
+  useEffect(() => {
+    if (open) {
+      openerRef.current = document.activeElement;
+      setTimeout(() => headingRef.current?.focus(), 0);
+    } else {
+      if (openerRef.current && typeof openerRef.current.focus === 'function') {
+        openerRef.current.focus();
+      }
+    }
+  }, [open]);
+
+  // a11y: focus trap + Escape handling while drawer is open
+  useEffect(() => {
+    if (!open) return;
+
+    const drawer = drawerRef.current;
+    if (!drawer) return;
+
+    const getFocusable = () =>
+      drawer.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+
+    function onKeyDown(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose?.();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const nodes = getFocusable();
+        if (nodes.length === 0) return;
+        const first = nodes[0];
+        const last = nodes[nodes.length - 1];
+        const active = document.activeElement;
+
+        if (e.shiftKey) {
+          if (active === first || !drawer.contains(active)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (active === last || !drawer.contains(active)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown, true);
+    return () => document.removeEventListener('keydown', onKeyDown, true);
+  }, [open, onClose]);
+
   return (
     <div style={{
       position:'fixed', inset:0, pointerEvents: open ? 'auto' : 'none', zIndex: 60
     }}>
+      {/* a11y: clicking backdrop closes and focus will be restored */}
       <div onClick={onClose} style={{
         position:'absolute', inset:0, background:'rgba(0,0,0,.4)', opacity: open ? 1 : 0, transition:'opacity .2s'
       }} />
-      <aside className="card" style={{
-        position:'absolute', right:0, top:0, bottom:0, width:'min(420px, 90vw)', transform:`translateX(${open? '0':'100%'})`,
-        transition:'transform .25s ease', display:'flex', flexDirection:'column'
-      }}>
+      <aside
+        ref={drawerRef}
+        className="card"
+        aria-modal="true"
+        role="dialog"
+        aria-labelledby="cart-drawer-heading"
+        style={{
+          position:'absolute', right:0, top:0, bottom:0, width:'min(420px, 90vw)', transform:`translateX(${open? '0':'100%'})`,
+          transition:'transform .25s ease', display:'flex', flexDirection:'column'
+        }}
+      >
         <div style={{padding:14, display:'flex', alignItems:'center', justifyContent:'space-between', borderBottom:'1px solid var(--border)'}}>
-          <div style={{fontWeight:700}}>Your Cart</div>
+          {/* a11y: initial focus target */}
+          <div id="cart-drawer-heading" tabIndex={-1} ref={headingRef} style={{fontWeight:700}}>Your Cart</div>
           <button className="btn" onClick={onClose}>Close</button>
         </div>
         <div style={{padding:14, overflow:'auto', flex:1, display:'grid', gap:10}}>

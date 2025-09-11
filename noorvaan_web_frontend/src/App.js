@@ -20,9 +20,12 @@ export default function App() {
 
   return (
     <>
+      {/* a11y: Skip link allows keyboard users to jump to main content */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       <PromoBar />
       <Header onOpenCart={() => setDrawerOpen(true)} cartCount={items.reduce((s,i)=>s+i.qty,0)} />
-      <main className="container" style={{paddingTop: 24}}>
+      {/* a11y: Give the main landmark a stable target for skip link */}
+      <main id="main-content" className="container" style={{paddingTop: 24}}>
         <Routes>
           <Route path="/" element={<HomePage onOpenCart={() => setDrawerOpen(true)} />} />
           <Route path="/shop" element={<PLPPage />} />
